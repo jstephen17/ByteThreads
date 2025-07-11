@@ -20,32 +20,44 @@ document.querySelectorAll('.password_field').forEach(
 });
 
 
-form_signUp.addEventListener('submit', function(event){
+form_signUp.addEventListener('submit', async function(event){
     event.preventDefault();
 
-    const email = document.getElementById("email_signUp").value;
-    const username = document.getElementById("username_signUp").value;
-    const password = document.getElementById("password_signUp").value;
+    const user_email = document.getElementById("email_signUp").value;
+    const user_name = document.getElementById("username_signUp").value;
+    const user_password = document.getElementById("password_signUp").value;
     const repeatpassword = document.getElementById("repeatpassword_signUp").value;
     
 
-    if(email.length === 0 || username.length === 0 || password.length === 0 || repeatpassword.length === 0){alert("Please fill out all the fields."); return;}
+    if(user_email.length === 0 || user_name.length === 0 || user_password.length === 0 || repeatpassword.length === 0){alert("Please fill out all the fields."); return;}
 
-    if(!email_regex.test(email)){ 
+    if(!email_regex.test(user_email)){ 
         alert("Please enter a valid email."); 
         return;
     }
 
-    if(!password_regex.test(password)){ 
+    if(!password_regex.test(user_password)){ 
         alert("Password must be 8-32 characters, with at least one uppercase letter, one lowercase letter, one number, and one special character."); 
         return;
     }
 
-    if(password !== repeatpassword){ alert("Passwords do not match."); return; }
+    if(user_password !== repeatpassword){ alert("Passwords do not match."); return; }
 
-    console.log("Email: " + email);
-    console.log("Username: " + username);
-    console.log("Password: " + password);
+    console.log("Email: " + user_email);
+    console.log("Username: " + user_name);
+    console.log("Password: " + user_password);
+
+    const res = await fetch("http://localhost:5000/api/users",{
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json' 
+    },
+    body: JSON.stringify({ name: user_name, email: user_email, password: user_password, display_pic: 'idk'})
+
+    });
+
+    const result = await res.json();
+    console.log(result);
 
 });
 
